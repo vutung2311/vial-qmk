@@ -6,6 +6,8 @@
 #include "gpio.h"
 #include "wait.h"
 #include "pico/bootrom.h"
+#include "pico/runtime_init.h"
+#include "rp_clocks.h"
 
 #if !defined(RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED)
 #    define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED_MASK 0U
@@ -37,9 +39,10 @@ const uint32_t magic_token = 0xCAFEB0BA;
 // populated function pointer tables to the optimized math functions in the
 // bootrom. This function is called just prior to main.
 void __late_init(void) {
-    // All clocks have to be enabled before jumping to the bootloader function,
-    // otherwise the bootrom will be stuck infinitely.
-    clocks_init();
+    // Initialize clocks via ChibiOS native init so the CPU runs at full
+    // speed and the bootrom has working clocks for reset_usb_boot().
+    rp_clock_init();
+    SystemCoreClock = RP_CLK_SYS_FREQ;
 
     if (magic_location != magic_token) {
         magic_location = magic_token;

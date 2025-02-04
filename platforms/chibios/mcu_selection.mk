@@ -146,7 +146,8 @@ ifneq ($(findstring RP2040, $(MCU)),)
   MCU = cortex-m0plus
 
   # ARM version, CORTEX-M0/M1 are 6, CORTEX-M3/M4/M7 are 7
-  CHIBIOS_PORT = ARMv6-M-RP2
+  CHIBIOS_PORT = ARMv6-M
+  CHIBIOS_PORT_EXTRA = rp2
 
   ## chip/board settings
   # - the next two should match the directories in

@@ -30,6 +30,8 @@
 
 #define _CHIBIOS_RT_CONF_
 #define _CHIBIOS_RT_CONF_VER_7_0_
+#define _CHIBIOS_RT_CONF_VER_8_0_
+#define _CHIBIOS_HAL_CONF_VER_9_0_
 
 /*===========================================================================*/
 /**
@@ -828,6 +830,16 @@
 #define CH_CFG_RUNTIME_FAULTS_HOOK(mask) {                                  \
   /* Faults handling code here.*/                                           \
 }
+
+/**
+ * @brief   Safety checks hook.
+ * @details This hook is invoked when there is a safety violation and the
+ *          system is going to stop.
+ */
+ #define CH_CFG_SAFETY_CHECK_HOOK(l, f) {                                    \
+    /* Safety handling code here.*/                                           \
+    chSysHalt(f);                                                             \
+  }
 
 /** @} */
 

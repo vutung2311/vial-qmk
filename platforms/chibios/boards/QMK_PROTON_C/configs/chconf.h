@@ -829,6 +829,16 @@
   /* Faults handling code here.*/                                           \
 }
 
+/**
+ * @brief   Safety checks hook.
+ * @details This hook is invoked when there is a safety violation and the
+ *          system is going to stop.
+ */
+ #define CH_CFG_SAFETY_CHECK_HOOK(l, f) {                                    \
+    /* Safety handling code here.*/                                           \
+    chSysHalt(f);                                                             \
+  }
+
 /** @} */
 
 /*===========================================================================*/

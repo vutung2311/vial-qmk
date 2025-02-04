@@ -59,7 +59,11 @@ else
 
     # Port files. Try a few different locations, for compability with old versions and
     # for things hardware in the contrib repository
-    PORT_V = $(CHIBIOS)/os/common/ports/$(CHIBIOS_PORT)/compilers/GCC/mk/port.mk
+    ifneq ($(CHIBIOS_PORT_EXTRA),)
+        PORT_V = $(CHIBIOS)/os/common/ports/$(CHIBIOS_PORT)/compilers/GCC/mk/port_$(CHIBIOS_PORT_EXTRA).mk
+    else
+        PORT_V = $(CHIBIOS)/os/common/ports/$(CHIBIOS_PORT)/compilers/GCC/mk/port.mk
+    endif
     ifeq ("$(wildcard $(PORT_V))","")
         PORT_V = $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v$(ARMV)m.mk
         ifeq ("$(wildcard $(PORT_V))","")
@@ -88,9 +92,9 @@ ifeq ("$(MCU_PORT_NAME)","")
 endif
 
 ifeq ("$(wildcard $(PLATFORM_MK))","")
-    PLATFORM_MK = $(CHIBIOS_CONTRIB)/os/hal/ports/$(MCU_PORT_NAME)/$(MCU_SERIES)/$(PLATFORM_NAME).mk
+    PLATFORM_MK = $(CHIBIOS)/os/hal/ports/$(MCU_PORT_NAME)/$(MCU_SERIES)/$(PLATFORM_NAME).mk
     ifeq ("$(wildcard $(PLATFORM_MK))","")
-        PLATFORM_MK = $(CHIBIOS)/os/hal/ports/$(MCU_PORT_NAME)/$(MCU_SERIES)/$(PLATFORM_NAME).mk
+        PLATFORM_MK = $(CHIBIOS_CONTRIB)/os/hal/ports/$(MCU_PORT_NAME)/$(MCU_SERIES)/$(PLATFORM_NAME).mk
     endif
 endif
 
@@ -279,7 +283,7 @@ PLATFORM_SRC = \
         $(PLATFORMSRC) \
         $(BOARDSRC) \
         $(STREAMSSRC) \
-        $(CHIBIOS)/os/various/syscalls.c \
+        $(CHIBIOS)/os/various/syscalls_to_be_removed.c \
         $(PLATFORM_COMMON_DIR)/syscall-fallbacks.c \
         $(PLATFORM_COMMON_DIR)/wait.c \
         $(PLATFORM_COMMON_DIR)/synchronization_util.c \
@@ -296,7 +300,8 @@ EXTRAINCDIRS += $(CHIBIOS)/os/license \
          $(HALCONFDIR) $(CHCONFDIR) \
          $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) $(OSLIBINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
-         $(STREAMSINC) $(CHIBIOS)/os/various $(COMMON_VPATH)
+         $(STREAMSINC) $(CHIBIOS)/os/various $(COMMON_VPATH) \
+         $(ALLINC)
 
 #
 # QMK specific MCU family support selection.
