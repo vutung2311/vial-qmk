@@ -16,11 +16,15 @@ endif
 # Raspberry Pi Pico SDK Support
 ##############################################################################
 ADEFS  += -DCRT0_VTOR_INIT=1 \
-		  -DCRT0_EXTRA_CORES_NUMBER=0 \
+		  -DCRT0_EXTRA_CORES_NUMBER=1 \
           -DCRT0_INIT_VECTORS=1
 
 CFLAGS += -DPICO_NO_FPGA_CHECK \
           -DNDEBUG
+
+# CRT0_EXTRA_CORES_NUMBER must also be a C define (not just ADEFS)
+# so crt1.c compiles the Core 1 startup stubs (__c1_cpu_init, etc.)
+OPT_DEFS += -DCRT0_EXTRA_CORES_NUMBER=1
 
 #
 # Pico SDK source and header files needed by QMK and ChibiOS
@@ -79,7 +83,8 @@ EXTRAINCDIRS += $(PICOSDKINC)
 PLATFORM_RP2040_PATH := $(PLATFORM_PATH)/$(PLATFORM_KEY)/vendors/$(MCU_FAMILY)
 
 PLATFORM_SRC +=	$(PLATFORM_RP2040_PATH)/stage2_bootloaders.c \
-				$(PLATFORM_RP2040_PATH)/pico_sdk_shims.c
+				$(PLATFORM_RP2040_PATH)/pico_sdk_shims.c \
+				$(PLATFORM_RP2040_PATH)/c1_main.c
 
 EXTRAINCDIRS += $(PLATFORM_RP2040_PATH)
 
