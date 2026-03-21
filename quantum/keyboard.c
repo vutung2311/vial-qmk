@@ -502,7 +502,7 @@ void keyboard_init(void) {
 #if defined(CRC_ENABLE)
     crc_init();
 #endif
-#ifdef OLED_ENABLE
+#if defined(OLED_ENABLE) && !defined(RP2040_SMP_OLED_CORE1)
     oled_init(OLED_ROTATION_0);
 #endif
 #ifdef ST7565_ENABLE
@@ -556,6 +556,11 @@ void keyboard_init(void) {
 
 #if defined(DEBUG_MATRIX_SCAN_RATE) && defined(CONSOLE_ENABLE)
     debug_enable = true;
+#endif
+
+#ifdef RP2040_SMP_OLED_CORE1
+    extern volatile bool c1_keyboard_init_complete;
+    c1_keyboard_init_complete = true;
 #endif
 
     keyboard_post_init_quantum(); /* Always keep this last */
@@ -774,7 +779,7 @@ void keyboard_task(void) {
     }
 #endif
 
-#ifdef OLED_ENABLE
+#if defined(OLED_ENABLE) && !defined(RP2040_SMP_OLED_CORE1)
     oled_task();
 #    if OLED_TIMEOUT > 0
     // Wake up oled if user is using those fabulous keys or spinning those encoders!
