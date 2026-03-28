@@ -456,7 +456,9 @@ void oled_render_dirty(bool all) {
     }
 
     // Turn on display if it is off
+#ifndef OLED_MANUAL_POWER
     oled_on();
+#endif
 
     uint8_t update_start  = 0;
     uint8_t num_processed = 0;
