@@ -180,7 +180,7 @@ static void ws2812_dma_callback(void* p, uint32_t ct) {
 void ws2812_init(void) {
     uint pio_idx = pio_get_index(pio);
     /* Get PIOx peripheral out of reset state. */
-    hal_lld_peripheral_unreset(pio_idx == 0 ? RESETS_ALLREG_PIO0 : RESETS_ALLREG_PIO1);
+    rp_peripheral_unreset(pio_idx == 0 ? RESETS_ALLREG_PIO0 : RESETS_ALLREG_PIO1);
 
     // clang-format off
     iomode_t rgb_pin_mode = PAL_RP_PAD_SLEWFAST |

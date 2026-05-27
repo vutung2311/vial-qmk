@@ -283,11 +283,17 @@ PLATFORM_SRC = \
         $(PLATFORMSRC) \
         $(BOARDSRC) \
         $(STREAMSSRC) \
-        $(CHIBIOS)/os/various/syscalls_to_be_removed.c \
         $(PLATFORM_COMMON_DIR)/syscall-fallbacks.c \
         $(PLATFORM_COMMON_DIR)/wait.c \
         $(PLATFORM_COMMON_DIR)/synchronization_util.c \
         $(PLATFORM_COMMON_DIR)/interrupt_handlers.c
+
+# If the new syscalls.c exists under newlib_bindings, use it, otherwise use the old syscalls_to_be_removed.c
+ifeq ("$(wildcard $(CHIBIOS)/os/various/newlib_bindings/syscalls.c)","")
+    PLATFORM_SRC += $(CHIBIOS)/os/various/syscalls_to_be_removed.c
+else
+    PLATFORM_SRC += $(CHIBIOS)/os/various/newlib_bindings/syscalls.c
+endif
 
 # Ensure the ASM files are not subjected to LTO -- it'll strip out interrupt handlers otherwise.
 QUANTUM_LIB_SRC += $(STARTUPASM) $(PORTASM) $(OSALASM) $(PLATFORMASM)

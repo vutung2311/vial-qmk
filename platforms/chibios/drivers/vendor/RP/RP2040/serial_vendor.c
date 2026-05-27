@@ -395,7 +395,7 @@ static inline void pio_init(pin_t tx_pin, pin_t rx_pin) {
     uint pio_idx = pio_get_index(pio);
 
     /* Get PIOx peripheral out of reset state. */
-    hal_lld_peripheral_unreset(pio_idx == 0 ? RESETS_ALLREG_PIO0 : RESETS_ALLREG_PIO1);
+    rp_peripheral_unreset(pio_idx == 0 ? RESETS_ALLREG_PIO0 : RESETS_ALLREG_PIO1);
 
     tx_state_machine = pio_claim_unused_sm(pio, true);
     if (tx_state_machine < 0) {

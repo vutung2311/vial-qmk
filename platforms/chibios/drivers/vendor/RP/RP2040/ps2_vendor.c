@@ -118,7 +118,7 @@ void ps2_host_init(void) {
     ibqObjectInit(&pio_rx_queue, false, pio_rx_buffer, sizeof(uint32_t), BUFFER_SIZE, NULL, NULL);
     uint pio_idx = pio_get_index(pio);
 
-    hal_lld_peripheral_unreset(pio_idx == 0 ? RESETS_ALLREG_PIO0 : RESETS_ALLREG_PIO1);
+    rp_peripheral_unreset(pio_idx == 0 ? RESETS_ALLREG_PIO0 : RESETS_ALLREG_PIO1);
 
     state_machine = pio_claim_unused_sm(pio, true);
     if (state_machine < 0) {
