@@ -21,7 +21,7 @@ volatile bool c1_keyboard_init_complete = false;
 /* OLED thread — owns I2C init + OLED init + OLED task loop.
  * Waits for Core 0's keyboard_init() so is_keyboard_master()
  * returns the correct value for rotation and content. */
-static THD_WORKING_AREA(waOledThread, 512);
+static THD_WORKING_AREA(waOledThread, 2048);
 static THD_FUNCTION(OledThread, arg) {
     (void)arg;
     chRegSetThreadName("oled");
